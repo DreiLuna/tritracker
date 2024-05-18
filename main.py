@@ -214,6 +214,8 @@ def run():
                         fatFile.write(str(int(fatRead) + int(fat)))
                 
     else:
+        with open('history.txt', 'w') as historyFile:
+            pass
         #days = 1 to set the days equal to 1 if the user does not change the value
         days = 1
         sex = askSex()
