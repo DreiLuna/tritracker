@@ -216,6 +216,8 @@ def run():
     else:
         with open('history.txt', 'w') as historyFile:
             pass
+        with open('presets.txt', 'w') as presetFile:
+            pass
         #days = 1 to set the days equal to 1 if the user does not change the value
         days = 1
         sex = askSex()
