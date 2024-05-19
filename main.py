@@ -9,18 +9,28 @@ def reset():
     with open('fat.txt', 'w') as fatFile:
             fatFile.write('0')
 
+def printCalsEaten():
+    with open('cal.txt', 'r') as calFile:
+        cal = calFile.read()
+    with open('info.txt', 'r') as calFile:
+        calorieGoal = calFile.readlines()
+    print(f'Calories Eaten: {cal}/{calorieGoal[0]}')
+
 def choosePreset():
     with open('presets.txt', 'r+') as presetFile:
         lines = presetFile.readlines()
+
         for line in lines:
             print(line, end ='')
         print()
+
         presets = dict()
         for i in range(len(lines)):
             if i == (len(lines)-1):
                 presets[lines[i][0:(lines[i].index('-') - 1)]] = [lines[i][(lines[i].index('-') + 1):(lines[i].index('/')-4)], lines[i][(lines[i].index('/')+2):(lines[i].index('/',(lines[i].index('/')+1))-6)], lines[i][(lines[i].index('/',(lines[i].index('/')+1))+2):len(lines[i])-9]]
             else:
                 presets[lines[i][0:(lines[i].index('-') - 1)]] = [lines[i][(lines[i].index('-') + 1):(lines[i].index('/')-4)], lines[i][(lines[i].index('/')+2):(lines[i].index('/',(lines[i].index('/')+1))-6)], lines[i][(lines[i].index('/',(lines[i].index('/')+1))+2):len(lines[i])-10]]
+
         u_input = input('What preset would you like to use? ')
         while u_input.lower() not in presets:
             u_input1 = input("Your input did not match the key of any preset. Would you like to make a new one or try again?('new', 'try again')")
@@ -28,7 +38,11 @@ def choosePreset():
                 cal = input('Calories: ')
                 fat = input('fats: ')
                 protein = input('Protein: ')
-                presetFile.write(f'\n{u_input} - {cal}cal / {fat}g fat / {protein}g protein')
+
+                if len(lines) == 0:
+                    presetFile.write(f'{u_input} - {cal}cal / {fat}g fat / {protein}g protein')
+                else:
+                    presetFile.write(f'\n{u_input} - {cal}cal / {fat}g fat / {protein}g protein')
                 print(f'You selected: {u_input} which adds these macros: {cal} Calories, {fat} grams of fat, and {protein} grams of protein')
                 return[cal, fat, protein]
             else:
@@ -112,7 +126,6 @@ def run():
             lastYear = lines[0]
             lastMonth = lines[1]
             lastDay = lines[2]
-            print(year)
         with open('time.txt', 'w') as timeFile:
             timeFile.writelines([str(year),'\n',str(month),'\n',str(day)])
             if os.path.exists('history.txt'):
@@ -125,23 +138,22 @@ def run():
                 with open('history.txt', 'r+') as historyFile:
                     historyFile.writelines(historyLine)
                 reset()
-                dayFile.write(days)
             elif month > int(lastMonth):
                 days = str(int(days) +1)
                 with open('history.txt', 'r+') as historyFile:
                     historyFile.writelines(historyLine)
                 reset
-                dayFile.write(days)
             elif day > int(lastDay):
                 days = str(int(days) +1)
                 with open('history.txt', 'r+') as historyFile:
                     historyFile.writelines(historyLine)
                 reset()
-                dayFile.write(days)
+            dayFile.write(days)
 
 
         loop = True
         while(loop):
+            printCalsEaten()
             with open('protein.txt', 'r') as proteinFile:
                 proteinRead = proteinFile.read()
             with open('fat.txt', 'r') as fatFile:
@@ -279,5 +291,5 @@ def run():
             fatFile.write(str(0))
         with open('protein.txt', 'w') as proteinFile:
             proteinFile.write(str(0))
-
+print()
 run()
